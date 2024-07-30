@@ -1,3 +1,22 @@
+"""
+The player's tank
+Implements the ITank interface
+
+Usage Example:
+
+    >>> pygame.init()
+    (5, 0)
+    >>> p = Player(0, 1)
+    >>> p.x()
+    0
+    >>> p.y()
+    1
+    >>> p.update(pygame.key.get_pressed(), [1, 0,  1, 1])
+    >>> p.y()
+    1
+
+"""
+
 import pygame
 
 from tanks.TanksTypes.ITank import ITank
@@ -6,13 +25,13 @@ from tanks.TanksTypes.ITank import ITank
 class Player(ITank):
 
     def __init__(self, x, y):
-        self._x = x
-        self._y = y
+        self._x: float = x
+        self._y: float = y
 
-    def x(self):
+    def x(self) -> float:
         return self._x
 
-    def y(self):
+    def y(self) -> float:
         return self._y
 
     def update(self, keys, walls):
