@@ -1,4 +1,5 @@
 import pygame
+from tanks.TanksTypes.Player import Player
 
 
 class Window:
@@ -11,21 +12,30 @@ class Window:
 
         self.win = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 
-        self._run()
+    def frame(self, player: Player, gs: float):
+        self.win.fill(self.bg)
 
-    def _run(self):
-        running = True
-        while running:
-            self.win.fill(self.bg)
+        self.width = self.win.get_width()
+        self.height = self.win.get_height()
 
-            self.width = self.win.get_width()
-            self.height = self.win.get_height()
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                return False
 
-            for e in pygame.event.get():
-                if e.type == pygame.QUIT:
-                    running = False
+        pygame.draw.rect(
+            self.win,
+            self.color,
+            (
+                self.width / 2 + player.x() - gs / 2,
+                self.height / 2 - player.y() - gs / 2,
+                gs,
+                gs,
+            ),
+        )
 
-            pygame.display.flip()
+        pygame.display.flip()
+
+        return pygame.key.get_pressed()
 
 
 if __name__ == "__main__":
