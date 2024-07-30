@@ -27,6 +27,7 @@ class Player(ITank):
     def __init__(self, x, y):
         self._x: float = x
         self._y: float = y
+        self._facing = 0
 
     def x(self) -> float:
         return self._x
@@ -34,13 +35,19 @@ class Player(ITank):
     def y(self) -> float:
         return self._y
 
+    def facing(self) -> int:
+        return self._facing
+
     def update(self, keys, walls):
         if keys[pygame.K_UP]:
             self._y += 0.1
-        if keys[pygame.K_DOWN]:
+            self._facing = 0
+        elif keys[pygame.K_DOWN]:
             self._y -= 0.1
-
-        if keys[pygame.K_RIGHT]:
+            self._facing = 2
+        elif keys[pygame.K_RIGHT]:
             self._x += 0.1
-        if keys[pygame.K_LEFT]:
+            self._facing = 3
+        elif keys[pygame.K_LEFT]:
             self._x -= 0.1
+            self._facing = 1

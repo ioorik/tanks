@@ -10,6 +10,8 @@ class Window:
         self.color = defColor
         self.bg = bgColor
 
+        self.tank1 = pygame.image.load("Assets/tank1.png")
+
         self.win = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 
     def frame(self, player: Player, gs: float):
@@ -22,16 +24,21 @@ class Window:
             if e.type == pygame.QUIT:
                 return False
 
-        pygame.draw.rect(
-            self.win,
-            self.color,
-            (
-                self.width / 2 + player.x() - gs / 2,
-                self.height / 2 - player.y() - gs / 2,
-                gs,
-                gs,
-            ),
+        newImg = pygame.transform.rotate(self.tank1, player.facing() * 90)
+        self.win.blit(
+            newImg, (self.width / 2 + player.x(), self.height / 2 - player.y())
         )
+
+        # pygame.draw.rect(
+        #     self.win,
+        #     self.color,
+        #     (
+        #         self.width / 2 + player.x() - gs / 2,
+        #         self.height / 2 - player.y() - gs / 2,
+        #         gs,
+        #         gs,
+        #     ),
+        # )
 
         pygame.display.flip()
 

@@ -16,6 +16,11 @@ class ITank(metaclass=abc.ABCMeta):
 
     @property
     @abc.abstractmethod
+    def facing(self) -> int:
+        """Returns the facing direction of the tank"""
+
+    @property
+    @abc.abstractmethod
     def x(self) -> float:
         """Returns the x position of the tank"""
 
