@@ -2,6 +2,11 @@
 A tank interface
 
 Each tank should implement update and ... methods. And have the x,y propreties.
+
+    >>> ITank()
+    Traceback (most recent call last):
+        ...
+    TypeError: Can't instantiate abstract class ITank with abstract methods update, x, y
 """
 
 import abc
