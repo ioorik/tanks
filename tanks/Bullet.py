@@ -4,9 +4,9 @@ class Bullet:
         self.facing = direction
         self.y = y
         self.x = x
-        self.acc = 0.01
+        self.acc = 0.003
 
-    def update(self, walls):
+    def update(self, walls, bullets, player, enemies):
         if self.facing == 0:
             self.y += self.acc
         elif self.facing == 1:
@@ -19,11 +19,8 @@ class Bullet:
         for wall in walls:
             x, y, width, height = wall
             if (
-                x - 0.5 + width > self.x > x - 0.5
-                and y + height - 0.5 > self.y > y - 0.5
-            ) or (
-                x - 0.5 < self.x < x + width - 0.5
-                and y + height - 0.5 > self.y > y - 0.5
+                x + width - 0.5 > self.x > x - 0.5
+                and y + 0.5 > self.y > y - height + 0.5
             ):
                 return False
 
