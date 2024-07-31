@@ -37,6 +37,25 @@ class Tank1(ITank):
             elif self.facing() == 3:
                 self._x += self.acc
 
+        for wall in walls:
+            x, y, width, height = wall
+            if self._facing == 0:
+                if self._y < y + height:
+                    if self._y > y - 1 and x - 1 < self._x < x + width:
+                        self._y -= self.acc
+            if self._facing == 1:
+                if self._x < x + width:
+                    if self._x > x - 1 and y + 1 > self._y > y - height:
+                        self._x += self.acc
+            if self._facing == 2:
+                if self._y > y - 1:
+                    if self._y < y + height and x - 1 < self._x < x + width:
+                        self._y += self.acc
+            if self._facing == 3:
+                if self._x > x - 1:
+                    if self._x < x + width and y + 1 > self._y > y - height:
+                        self._x -= self.acc
+
         if randint(0, 1000) == 0:
             return True
         else:
