@@ -57,7 +57,7 @@ class Player(ITank):
             x, y, width, height = wall
             if x + width > self._x + 1 > x and y - 1 < self._y < y + height:
                 self._x -= self.acc
-            if x < self._x < x + width and y - 1 < self._y < y + width:
+            if x < self._x < x + width and y - 1 < self._y < y + height:
                 self._x += self.acc
 
             if y + height > self._y > y - 1.1 and x + width > self._x > x:
