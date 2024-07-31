@@ -44,7 +44,7 @@ class Window:
                 self.bullets.append(
                     Bullet(self.player.x(), self.player.y(), self.player.facing())
                 )
-                bulletCooldown = 100
+                bulletCooldown = 1000
 
             pImg = pygame.transform.rotate(self.tank1, self.player.facing() * 90)
             pImg = pygame.transform.scale(pImg, (self.gs, self.gs))
@@ -74,6 +74,32 @@ class Window:
                                 - self.gs / 2,
                             ),
                         )
+
+            for j in range(len(self.bullets)):
+                bullet = self.bullets[j]
+                for i in range(len(self.bullets)):
+                    if (
+                        bullet.x > self.width / 2
+                        or bullet.x < -self.width / 2
+                        or bullet.y > self.height / 2
+                        or bullet.y < -self.height / 2
+                    ):
+                        self.bullets.pop(i)
+                        break
+                if bullet.update(self.walls):
+                    pygame.draw.rect(
+                        self.win,
+                        (255, 255, 255),
+                        (
+                            self.width / 2 + bullet.x * self.gs - self.gs / 4 / 2,
+                            self.height / 2 - bullet.y * self.gs - self.gs / 4 / 2,
+                            self.gs / 4,
+                            self.gs / 4,
+                        ),
+                    )
+                else:
+                    self.bullets.pop(j)
+                    break
 
             pygame.display.flip()
 
