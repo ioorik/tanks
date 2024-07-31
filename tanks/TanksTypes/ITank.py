@@ -30,5 +30,5 @@ class ITank(metaclass=abc.ABCMeta):
         """Returns the y position of the tank"""
 
     @abc.abstractmethod
-    def update(self, keys, walls, gridSize):
+    def update(self, keys, walls):
         """Update the position, direction, wall collision of the tank"""
