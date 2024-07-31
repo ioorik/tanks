@@ -1,5 +1,6 @@
 import pygame
 from tanks.TanksTypes.Player import Player
+from tanks.Bullet import Bullet
 
 
 class Window:
@@ -14,16 +15,19 @@ class Window:
         self.gs = gridSize
 
         self.tank1 = pygame.image.load("tanks/Assets/tank1.png")
+        self.wallTexture = pygame.image.load("tanks/Assets/wall.png")
+
+        self.bullets: list[Bullet] = []
 
         self.win = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 
         self.player = Player(0, 0)
-        self.walls = [[2, 0, 1, 1]]
+        self.walls = [[2, 0, 2, 1]]
 
     def run(self):
+        bulletCooldown = 0
         while True:
             self.win.fill(self.bg)
-            self.player.update(pygame.key.get_pressed(), self.walls, self.gs)
 
             self.width = self.win.get_width()
             self.height = self.win.get_height()
@@ -32,30 +36,48 @@ class Window:
                 if e.type == pygame.QUIT:
                     return False
 
-            newImg = pygame.transform.rotate(self.tank1, self.player.facing() * 90)
-            newImg = pygame.transform.scale(newImg, (self.gs, self.gs))
+            keys = pygame.key.get_pressed()
+
+            self.player.update(keys, self.walls, self.gs)
+
+            if keys[pygame.K_SPACE] and bulletCooldown <= 0:
+                self.bullets.append(
+                    Bullet(self.player.x(), self.player.y(), self.player.facing())
+                )
+                bulletCooldown = 100
+
+            pImg = pygame.transform.rotate(self.tank1, self.player.facing() * 90)
+            pImg = pygame.transform.scale(pImg, (self.gs, self.gs))
             self.win.blit(
-                newImg,
+                pImg,
                 (
                     self.width / 2 + self.player.x() * self.gs - self.gs / 2,
                     self.height / 2 - self.player.y() * self.gs - self.gs / 2,
                 ),
             )
 
+            wImg = pygame.transform.scale(self.wallTexture, (self.gs, self.gs))
             for wall in self.walls:
                 x, y, width, height = wall
-                pygame.draw.rect(
-                    self.win,
-                    self.color,
-                    (
-                        self.width / 2 + x * self.gs - self.gs / 2,
-                        self.height / 2 - y * self.gs - self.gs / 2,
-                        self.gs * width,
-                        self.gs * height,
-                    ),
-                )
+                for i in range(width):
+                    for j in range(height):
+                        self.win.blit(
+                            wImg,
+                            (
+                                self.width / 2
+                                + x * self.gs
+                                + i * self.gs
+                                - self.gs / 2,
+                                self.height / 2
+                                - y * self.gs
+                                + j * self.gs
+                                - self.gs / 2,
+                            ),
+                        )
 
             pygame.display.flip()
+
+            bulletCooldown -= 1
 
 
 if __name__ == "__main__":
