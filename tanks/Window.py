@@ -59,20 +59,20 @@ class Window:
                 1,
             ],
             [
+                width // gridSize // 2 - 0.5,
+                height // gridSize // 2 - 1.5,
                 1,
-                1,
-                1,
-                1,
+                height // gridSize - 2,
             ],
         ]
 
     def run(self):
         bulletCooldown = 0
-        enemyCool = 10000
+        enemyCool = 5000
         while True:
             if enemyCool <= 0:
                 self.enemies.append(Tank1(0, 0))
-                enemyCool = 10000
+                enemyCool = 5000
             self.win.fill(self.bg)
 
             self.width = self.win.get_width()
@@ -88,11 +88,15 @@ class Window:
 
             for enemy in self.enemies:
                 if enemy.update(keys, self.walls):
-                    self.bullets.append(Bullet(enemy.x(), enemy.y(), enemy.facing()))
+                    self.bullets.append(
+                        Bullet(enemy.x(), enemy.y(), enemy.facing(), True)
+                    )
 
             if keys[pygame.K_SPACE] and bulletCooldown <= 0:
                 self.bullets.append(
-                    Bullet(self.player.x(), self.player.y(), self.player.facing())
+                    Bullet(
+                        self.player.x(), self.player.y(), self.player.facing(), False
+                    )
                 )
                 bulletCooldown = 1000
 
@@ -150,7 +154,10 @@ class Window:
                     ):
                         self.bullets.pop(i)
                         break
-                if bullet.update(self.walls, self.bullets, self.player, self.enemies):
+                vals = bullet.update(
+                    self.walls, self.bullets, self.player, self.enemies
+                )
+                if vals[0]:
                     pygame.draw.rect(
                         self.win,
                         (255, 255, 255),
@@ -163,6 +170,13 @@ class Window:
                     )
                 else:
                     self.bullets.pop(j)
+                    if vals[1] is not None:
+                        self.bullets.pop(vals[1] - 1)
+                    if vals[2]:
+                        print("Game Over!")
+                        return False
+                    if vals[3] is not None:
+                        self.enemies.pop(vals[3])
                     break
 
             pygame.display.flip()
